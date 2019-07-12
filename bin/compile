@@ -5,34 +5,46 @@ set -e
 
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 
 BIN_PATH="$BUILD_DIR/bin"
+LIB_PATH="$BUILD_DIR/vendor/wkhtmltox/lib"
 TMP_PATH="$BUILD_DIR/tmp"
-mkdir -p $CACHE_DIR $BIN_PATH $TMP_PATH
+mkdir -p $CACHE_DIR $BIN_PATH $LIB_PATH $TMP_PATH
 
-WKHTMLTOPDF_URL="https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb"
-WKHTMLTOPDF_PKG="$CACHE_DIR/wkhtmltopdf.deb"
-WKHTMLTOPDF_PATH="$TMP_PATH/wkhtmltopdf"
-WKHTMLTOPDF_BINARIES="$WKHTMLTOPDF_PATH/usr/local/bin"
+if [[ -f "$ENV_DIR/WKHTMLTOPDF_VERSION" ]]; then
+  WKHTMLTOPDF_VERSION=$(cat "$ENV_DIR/WKHTMLTOPDF_VERSION")
+else
+  WKHTMLTOPDF_VERSION="0.12.3"
+fi
+
+WKHTMLTOPDF_URL="https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox-${WKHTMLTOPDF_VERSION}_linux-generic-amd64.tar.xz"
+WKHTMLTOPDF_TAR="$CACHE_DIR/wkhtmltox.tar.xz"
+WKHTMLTOPDF_PATH="$TMP_PATH/wkhtmltox"
+WKHTMLTOPDF_BINARIES="$WKHTMLTOPDF_PATH/bin"
+WKHTMLTOPDF_LIBS="$WKHTMLTOPDF_PATH/lib"
 
 BIN_DIR=$(cd $(dirname $0); pwd)
 FONTS_DIR=$(cd "$BIN_DIR/../fonts"; pwd)
 
-if [ -f $WKHTMLTOPDF_PKG ]; then
-  echo "-----> Using wkhtmltopdf Debian package from cache"
+if [ -f $WKHTMLTOPDF_TAR ]; then
+  echo "-----> Using wkhtmltopdf tar from cache"
 else
-  echo "-----> Downloading wkhtmltopdf Debian package"
-  curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_PKG
+  echo "-----> Downloading wkhtmltopdf tar"
+  curl -L $WKHTMLTOPDF_URL -o $WKHTMLTOPDF_TAR
 fi
 
-echo "-----> Unpacking Debian package"
-dpkg -x $WKHTMLTOPDF_PKG $WKHTMLTOPDF_PATH
+echo "-----> Unpacking tar"
+tar -xf $WKHTMLTOPDF_TAR -C $TMP_PATH
 
 echo "-----> Setting permissions"
 chmod +x $WKHTMLTOPDF_BINARIES/*
 
 echo "-----> Moving binaries to the right place"
 mv $WKHTMLTOPDF_BINARIES/* $BIN_PATH/
+
+echo "-----> Moving libs to the right place"
+mv $WKHTMLTOPDF_LIBS/* $LIB_PATH/
 
 echo "-----> Cleaning up"
 rm -rf $WKHTMLTOPDF_PATH
