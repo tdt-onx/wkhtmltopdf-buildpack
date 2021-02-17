@@ -3,7 +3,6 @@
 
 set -e
 
-// Verbose mode
 if [ -n "$BUILDPACK_DEBUG" ]; then
     set -x
 fi
