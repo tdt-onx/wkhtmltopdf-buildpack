@@ -12,8 +12,8 @@ your environment.
 
 [Add this buildpack][2] to your Scalingo application to install the `wkhtmltopdf`
 and `wkhtmltoimage` binaries, and the corresponding library `libwkhtmltox`.
-You will need to setup your application to use a multi-buildpack environment.
-Then, your application will need both the wkhtmltopdf buildpack and the one for
+You need to setup your application to use a multi-buildpack environment.
+Then, your application need both the wkhtmltopdf buildpack and the one for
 the technology you use in your application. Here is an example using the Ruby buildpack:
 
 ```bash
