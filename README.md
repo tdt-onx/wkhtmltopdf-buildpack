@@ -5,8 +5,8 @@ your environment.
 
 ## Versions
 
-* Buildpack:   `0.2`
-* wkhtmltopdf: `0.12.3` by default
+* Buildpack:   `0.3`
+* wkhtmltopdf: `0.12.6-1` by default
 
 ## Usage
 
@@ -24,17 +24,29 @@ $ git add .buildpacks
 $ git commit -m 'Add multi-buildpack'
 ```
 
-If you want to use a `wkhtmltopdf` version other than 0.12.3, set
+### Other versiosn
+
+If you want to use a `wkhtmltopdf` version other than 0.12.6-1, set
 `WKHTMLTOPDF_VERSION`:
 
 ```bash
-scalingo env-set WKHTMLTOPDF_VERSION="0.12.4"
+scalingo env-set WKHTMLTOPDF_VERSION="0.12.3"
 ```
+
+As the distribution method for wkhtmltopdf has changed, you must also use a
+specific version of the buildpack. So modify your `.buildpacks` to reference
+the buildpack with a specific tag:
+
+```
+https://github.com/Scalingo/wkhtmltopdf-buildpack#v0.12.3
+```
+
+And commit this file.
 
 ## Troubleshooting
 
 If you run into issues when trying to deploy with this buildpack, make sure your
-app is running on the stack `scalingo` or `scalingo-18`. You can check this
+app is running on the stack `scalingo-18` or `scalingo-20`. You can check this
 with:
 
 ```bash
