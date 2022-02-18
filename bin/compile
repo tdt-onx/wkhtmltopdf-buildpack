@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
+echo "test.."
+
 set -e
 
 if [ -n "$BUILDPACK_DEBUG" ]; then
